@@ -1,0 +1,35 @@
+===============================================================================
+INFORMACJE O SYSTEMIE WINDOWS DLA HAKEROW - OD NAJŁATWIEJSZYCH DO NAJTRUDNIEJSZYCH
+===============================================================================
+
+[POZIOM: BARDZO ŁATWE] - Dostepne natychmiast, bez zadnych uprawnien
+-------------------------------------------------------------------------------
+* Dokladna wersja systemu i numer buildu (brakujace laty KB)
+* Nazwa biezacego uzytkownika oraz nazwa domeny/grupy roboczej
+* Aktywne polaczenia sieciowe, tabele routingu i otwarte porty (netstat)
+* Lista zainstalowanych aplikacji oraz ich wersji (szukanie podatnosci)
+* Podstawowa konfiguracja sprzetowa i zmienne srodowiskowe
+
+[POZIOM: SREDNIO TRUDNE] - Wymagaja podstawowego dostepu do konsoli uzytkownika
+-------------------------------------------------------------------------------
+* Klucze rejestru zwiazane z autostartem programow (Run/RunOnce)
+* Reguly zapory sieciowej Windows (Firewall)
+* Lista zaplanowanych zadan w Harmonogramie zadan (Task Scheduler)
+* Uprawnienia do plikow i folderow (Access Control Lists - ACL)
+* Spis uruchomionych procesow i uslug systemowych
+
+[POZIOM: TRUDNE] - Wymagaja uprawnien Administratora systemu
+-------------------------------------------------------------------------------
+* Zawartosc bazy SAM (skroty haseh / hashe lokalnych uzytkownikow)
+* Dane z Menedzera poswiadczen (Credential Manager) - hasla sieciowe i przegladarek
+* Klucze odzyskiwania BitLocker oraz prywatne certyfikaty systemowe
+* Tokeny dostepu aktywnych procesow (potrzebne do podszywania sie pod uzytkownikow)
+* Pelne logi zdarzen systemu (Event Logs) w poszukiwaniu wrazliwych danych
+
+[POZIOM: BARDZO TRUDNE] - Chronione przez jadro systemu i wirtualizacje (VBS)
+-------------------------------------------------------------------------------
+* Zawartosc pamieci RAM procesu LSASS (hasla w pamieci chronione przez LSA Protection)
+* Baza NTDS.dit (wszystkie hasla i konta w firmowej domenie Active Directory)
+* Poswiadczenia odizolowane w enklawach pamieci (chronione przez Credential Guard)
+* Klucze kryptograficzne chronione w module TPM (Trusted Platform Module)
+===============================================================================
