@@ -36,18 +36,48 @@ def get_win_build():
 
 
 
+def get_installed_apps():
+    path = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+    main_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)
 
 
+    app_list = []
+    index = 0
+
+    while True:
+        try:
+            subkey_name = winreg.EnumKey(main_key, index)
+            subkey_path = f"{path}\\{subkey_name}"
+            
+            subkey = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,subkey_path)
+
+            try:
+                app_name, _ = winreg.QueryValueEx(subkey,"DisplayName")
+                app_list.append(app_name)
+            except OSError:
+            # Podfolder nie ma wartości DisplayName (np. aktualizacja systemu)
+                pass
+            finally:
+                winreg.CloseKey(subkey)
+
+            index +=1
+        except OSError:
+        # Brak kolejnych podfolderów - koniec pętli
+            break
+    winreg.CloseKey(main_key)
+
+    return app_list
 
 
-
-    
 
 # Wyświetlenie wyników
-info = get_win_build()
-if isinstance(info, dict):
-    print(f"System: {info['Nazwa']}")
-    print(f"Wersja: {info['Wersja']}")
-    print(f"Pełny build: {info['Kompilacja']}")
-else:
-    print(info)
+# info = get_win_build()
+# if isinstance(info, dict):
+#     print(f"System: {info['Nazwa']}")
+#     print(f"Wersja: {info['Wersja']}")
+#     print(f"Pełny build: {info['Kompilacja']}")
+# else:
+#     print(info)
+
+
+print(get_installed_apps())
